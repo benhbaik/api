@@ -28,12 +28,12 @@ func NewRoom(name string) Room {
 }
 
 // NewGroup Creates a new chat group.
-func NewGroup(rooms []Room) Group {
+func NewGroup(rooms []Room) *Group {
 	newGroup := Group{}
 	for i := 0; i < len(rooms); i++ {
 		newGroup.IDs = append(newGroup.IDs, rooms[i].ID)
 		newGroup.Names = append(newGroup.Names, rooms[i].Name)
 		newGroup.Messages = append(newGroup.Messages, rooms[i].Messages...)
 	}
-	return newGroup
+	return &newGroup
 }

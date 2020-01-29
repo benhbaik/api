@@ -23,7 +23,7 @@ func HandleHTTP(res http.ResponseWriter, req *http.Request) {
 
 func handleGet(res http.ResponseWriter, req *http.Request) {
 	var rooms []chat.Room
-	var chatGroup chat.Group
+	var chatGroup *chat.Group
 	var err error
 
 	roomNamesStr := req.FormValue("room")
@@ -48,12 +48,14 @@ func handleGet(res http.ResponseWriter, req *http.Request) {
 		chatGroup = chat.NewGroup(rooms)
 	}
 
-	if rooms != nil {
-		js, _ := json.Marshal(chatGroup)
+	if chatGroup != nil {
+		js, _ := json.Marshal(*chatGroup)
+		res.Write(js)
+	} else if len(rooms) == 1 {
+		js, _ := json.Marshal(rooms[0])
 		res.Write(js)
 	} else {
-		js, _ := json.Marshal(rooms)
-		res.Write(js)
+		respondWithError(res, "Error getting chatrooms.")
 	}
 }
 
